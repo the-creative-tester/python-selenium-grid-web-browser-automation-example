@@ -1,6 +1,7 @@
 import os
 from lettuce import before, world, after
 from selenium import webdriver
+from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 from selenium.webdriver.firefox.firefox_binary import FirefoxBinary
 from features.pages.home_page import HomePage
 from features.pages.search_results_page import SearchResultsPage
@@ -22,9 +23,11 @@ def open_drivers():
     world.driver.maximize_window()
     
 def get_firefox():
-    # Locate Firefox from the default directory otherwise use FIREFOX_BIN #
     try:
-        driver = webdriver.Firefox()
+        # driver = webdriver.Firefox()
+        driver = webdriver.Remote(
+            command_executor='http://127.0.0.1:4444/wd/hub',
+            desired_capabilities=DesiredCapabilities.CHROME)
     except Exception:
         my_local_firefox_bin = os.environ.get('FIREFOX_BIN')
         firefox_binary = FirefoxBinary(my_local_firefox_bin)
